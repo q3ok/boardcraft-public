@@ -10,6 +10,15 @@ two games:
   trades, with two to four seats, 35 built-in bots and three neural network
   opponents. [Rules](src/boardcraft/games/rentcraft/content/rules.en.md)
 
+Rentcraft comes with a public [research log](https://github.com/q3ok/rentcraft) on how its bots and neural
+network opponents were built and measured.
+
+## Rentcraft and Monopoly
+
+**Monopoly is a trademark of Hasbro.** Rentcraft is an independent project and is not affiliated with, sponsored or
+endorsed by Hasbro. It implements the same mechanics as the classic modern edition of Monopoly, but it is not the
+Monopoly game: it has its own names for cards and squares, its own card texts, logo and artwork.
+
 ## Requirements
 
 - Python 3.10 or newer
