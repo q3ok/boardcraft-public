@@ -1,0 +1,229 @@
+/* ============================================================================================================================
+   RENTCRAFT TABLE - geometry of everything over the 3D table (canvas, side HUD, player rows, space tip, seat tags, owner badge,
+   log, trade window, card show) and Rentcraft's PRINTED content (title deeds, group colours, mini cards, drawn cards).
+   The look of panels, bar, pills and dialogs is the shared table chrome (ui/table.css); colours come from ui/tokens.css.
+   ============================================================================================================================ */
+
+:root {
+  --print-rc-paper: #fbf8ef; --print-rc-ink: #161616; --print-rc-ink-dark: #111; --print-rc-ink-dim: #333; --print-rc-ink-soft: #555;
+  --print-rc-edge: #222; --print-rc-rule: #ddd; --print-rc-white: #fff;
+  --print-rc-font: "Arial Narrow", Arial, sans-serif; --print-rc-font-plain: Arial, sans-serif;
+  --print-rc-now: #ffe27a; --print-rc-now-edge: #d97706; --print-rc-note: #fff4c2; --print-rc-note-line: #e9b949;
+  --print-rc-free: #e7f5e9; --print-rc-free-line: #7cc38a;
+  --print-rc-mort: #fde2e2; --print-rc-mort-line: #e08a8a; --print-rc-mort-ink: #991b1b; --print-rc-mort-band: #b91c1c;
+  --print-rc-price: #444;
+  --print-rc-brown: #7a4326; --print-rc-light-blue: #9fd8f0; --print-rc-pink: #d43b8a; --print-rc-orange: #ee8a1e;
+  --print-rc-red: #de2027; --print-rc-yellow: #f6dd12; --print-rc-green: #18a253; --print-rc-dark-blue: #1b4fa0;
+  --print-rc-station: #2b2b2b; --print-rc-special: #333;
+  --print-rc-chance-a: #f3a03e; --print-rc-chance-b: #d9701a; --print-rc-chance-edge: #ee8a1e; --print-rc-chance-ink: #c2630e;
+  --print-rc-chest-a: #6cbbe2; --print-rc-chest-b: #2f86b5; --print-rc-chest-edge: #4ea6d4; --print-rc-chest-ink: #23729c;
+}
+
+.rc-table { --rc-hud-width: 330px; position: relative; isolation: isolate; overflow: hidden; width: 100%; height: 100dvh; min-height: 320px; background: var(--scene-bg, #23170f); container-type: inline-size; }
+.rc-table:fullscreen { height: 100%; width: 100%; }
+/* On the play app's table screen the board fills its stage, which sits below any page header, not the whole viewport. */
+.bc-stage:not(.bc-embedded-stage) > .rc-table { height: 100%; }
+.rc-canvas, .rc-tags, .rc-overlay { position: absolute; inset: 0; width: 100%; height: 100%; }
+.rc-canvas { touch-action: none; display: block; }
+.rc-tags { pointer-events: none; overflow: hidden; z-index: 5; }
+.rc-overlay { pointer-events: none; z-index: 40; }
+.rc-overlay:empty { display: none; }
+.rc-table .hud { position: absolute; top: var(--sp-5); right: var(--sp-5); bottom: var(--sp-5); width: var(--rc-hud-width); display: flex; flex-direction: column; gap: var(--sp-4); overflow-y: auto; z-index: 6; scrollbar-width: thin; }
+.rc-table .hud > .panel { flex: none; }
+.rc-table .rc-top { max-width: calc(100% - var(--rc-hud-width) - 48px); flex-wrap: wrap; }
+.rc-table .hint { position: absolute; left: 14px; bottom: var(--sp-5); z-index: 4; max-width: calc(100% - var(--rc-hud-width) - 60px); }
+.rc-table .autopilot-bar { position: absolute; top: 64px; left: var(--sp-5); z-index: 6; max-width: min(520px, calc(100% - var(--rc-hud-width) - 60px)); }
+.rc-table .autopilot-bar:empty { display: none; }
+.rc-table .rc-replay { position: absolute; left: var(--sp-5); right: calc(var(--rc-hud-width) + 2 * var(--sp-5)); bottom: var(--sp-5); z-index: 6; pointer-events: none; }
+.rc-table .rc-replay:empty { display: none; }
+.rc-table.rc-replaying .hint { display: none; }
+
+/* ---------- HUD content ---------- */
+.rc-table .pl { display: flex; align-items: center; gap: 7px; font-size: var(--fs-base); padding: 5px var(--sp-1); border-radius: var(--r-sm); cursor: pointer; }
+.rc-table .pl:hover { background: var(--wash); }
+.rc-table .pl.act { background: var(--gold-wash); }
+.rc-table .pl.me .n b { text-decoration: underline; }
+.rc-table .pl.out { opacity: 0.45; }
+.rc-table .pl .d { width: 11px; height: 11px; border-radius: 50%; flex: none; }
+.rc-table .pl .an { font-size: 15px; }
+.rc-table .pl .n { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.rc-table .pl .m { text-align: right; white-space: nowrap; }
+.rc-table .pl .m small { display: block; font-size: var(--fs-2xs); color: var(--mute); }
+.rc-table .pl .cam { opacity: 0.4; }
+.rc-table .phase { font-size: var(--fs-lg); line-height: 1.45; margin-bottom: var(--sp-3); }
+.rc-table .bids { display: flex; gap: 5px; margin-bottom: var(--sp-2); flex-wrap: wrap; }
+.rc-table details.manage { margin-top: var(--sp-3); }
+.rc-table details.manage summary { cursor: pointer; color: var(--mute); font-size: var(--fs-base); margin-bottom: var(--sp-2); }
+.rc-table details.manage .btn { display: block; width: 100%; text-align: left; margin-bottom: var(--sp-1); }
+.rc-table .inline-deed { margin: var(--sp-2) 0 var(--sp-4); }
+.rc-table .inline-deed .deed { width: 100%; }
+.rc-table .trade-btn { width: 100%; margin-top: var(--sp-3); }
+.rc-table .btn.trade-btn[disabled] { opacity: 0.75; cursor: default; }
+.rc-table .trade-info { margin-bottom: var(--sp-3); }
+.rc-table .window-info [data-left] { font-weight: 700; }
+.rc-table .debt-info .btn { margin-top: var(--sp-1); }
+.rc-table .mind .who { display: flex; gap: var(--sp-2); align-items: center; flex-wrap: wrap; margin-bottom: var(--sp-1); }
+.rc-table .mind .moves div { padding: 2px 0; font-size: var(--fs-md); }
+.rc-table .mind .moves div.trade { color: var(--gold); }
+.rc-table .mind .chosen { font-weight: 700; margin: var(--sp-2) 0 0; }
+
+/* ---------- log ---------- */
+.rc-table .log .log-lines { max-height: 210px; overflow-y: auto; padding-right: var(--sp-1); }
+.rc-table .log .log-lines div { font-size: var(--fs-md); padding: 2px 0; opacity: 0.8; color: var(--tc-ink); }
+.rc-table .log .log-lines div:first-child { opacity: 1; font-weight: 600; }
+.rc-table .log .log-lines div.trade { opacity: 1; color: var(--gold); background: var(--gold-wash); border-left: 3px solid var(--gold); padding: 3px var(--sp-2); border-radius: var(--r-xs); margin: 2px 0; }
+.rc-table .log .log-lines div.empty { color: var(--mute); font-style: italic; }
+.rc-table .log-head { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); }
+.rc-table .log-head h4 { margin: 0; }
+.rc-table .log-head .seg button { font-size: var(--fs-xs); padding: 2px 7px; }
+.rc-table .log-head .seg button:first-child { border-radius: var(--r-sm) 0 0 var(--r-sm); }
+.rc-table .log-head .seg button:last-child { border-radius: 0 var(--r-sm) var(--r-sm) 0; }
+
+/* ---------- space tip (hover / pinned), owner badge ---------- */
+.rc-table .tip { position: absolute; pointer-events: none; display: none; z-index: 10; }
+.rc-table .tip.interactive { pointer-events: auto; }
+.rc-table .tip .deed { width: 270px; }
+.rc-table .tip-x { position: absolute; top: -10px; right: -10px; width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--line); background: var(--btn); color: var(--ink); cursor: pointer; z-index: 1; font-size: var(--fs-base); padding: 0; }
+.rc-table .tip-acts { display: flex; flex-direction: column; gap: 5px; margin-top: var(--sp-2); width: 270px; }
+.rc-table .tip-acts .btn { width: 100%; box-shadow: var(--sh-2); }
+.rc-table .tip-note { width: 270px; margin-top: var(--sp-2); font-size: var(--fs-md); padding: 5px var(--sp-3); }
+.rc-table .owner-badge { width: 270px; display: flex; align-items: center; gap: var(--sp-2); margin-bottom: 5px; padding: var(--sp-2) var(--sp-4); font-size: var(--fs-lg); }
+.rc-table .owner-badge .d { width: 11px; height: 11px; border-radius: 50%; background: var(--pc); flex: none; }
+.rc-table .owner-badge.bank { color: var(--ok); border-color: var(--ok-line); }
+.rc-table .tw-tip { position: absolute; z-index: 70; pointer-events: none; }
+
+/* ---------- seat tags at the board edges ---------- */
+.rc-table .seat-tag { position: absolute; left: 0; top: 0; display: flex; align-items: center; gap: var(--sp-2); padding: var(--sp-1) var(--sp-4) var(--sp-1) 5px; white-space: nowrap; font-size: var(--fs-base); will-change: transform; }
+.rc-table .seat-tag .an { width: 24px; height: 24px; border-radius: 50%; background: var(--pc); display: flex; align-items: center; justify-content: center; font-size: var(--fs-xl); }
+.rc-table .seat-tag .nm { font-weight: 700; max-width: 140px; overflow: hidden; text-overflow: ellipsis; }
+.rc-table .seat-tag .cash { color: var(--ok); font-variant-numeric: tabular-nums; }
+.rc-table .seat-tag.me { font-size: var(--fs-xl); padding: 5px 13px 5px var(--sp-2); }
+.rc-table .seat-tag.me .an { width: 30px; height: 30px; font-size: var(--fs-3xl); }
+.rc-table .seat-tag.me .cash { font-size: var(--fs-2xl); }
+.rc-table .seat-tag.out { opacity: 0.45; }
+.rc-table .seat-tag.out .cash { color: var(--bad); }
+
+/* ---------- transient: floating numbers ---------- */
+.rc-table .float { position: absolute; z-index: 20; font-weight: 800; font-size: var(--fs-xl); pointer-events: none; animation: rcFloatUp 1.6s ease-out forwards; }
+.rc-table .float.plus { color: var(--ok); }
+.rc-table .float.minus { color: var(--bad); }
+@keyframes rcFloatUp { from { transform: translateY(0); opacity: 1; } to { transform: translateY(-36px); opacity: 0; } }
+
+/* ---------- trade window ---------- */
+.rc-table .tw-win { width: min(780px, 94%); max-height: 100%; overflow: auto; }
+.rc-table .tw-hd { display: flex; align-items: center; gap: var(--sp-5); padding: var(--sp-5) var(--sp-6); border-bottom: 1px solid var(--line); background: var(--shade); flex-wrap: wrap; }
+.rc-table .tw-hd .who { display: flex; gap: var(--sp-2); flex-wrap: wrap; }
+.rc-table .tw-hd .tw-close { margin-left: auto; }
+.rc-table .tw-cols { display: grid; grid-template-columns: 1fr 44px 1fr; padding: 14px var(--sp-6); }
+.rc-table .tw-col h4 { margin: 0 0 var(--sp-3); font-size: var(--fs-base); display: flex; justify-content: space-between; }
+.rc-table .tw-col h4 small { color: var(--mute); font-weight: 400; }
+.rc-table .tw-swap { display: flex; align-items: center; justify-content: center; font-size: var(--fs-5xl); color: var(--gold); }
+.rc-table .tw .cards { display: flex; flex-wrap: wrap; gap: var(--sp-2); min-height: 92px; padding: var(--sp-3); border-radius: var(--r-lg); background: var(--shade); border: 1px dashed var(--line); align-content: flex-start; }
+.rc-table .cashchip { padding: var(--sp-2) var(--sp-4); border-radius: var(--r-md); background: var(--ok-wash); color: var(--ok); font-weight: 700; align-self: center; }
+.rc-table .tw .extra { display: flex; gap: var(--sp-4); margin-top: var(--sp-3); align-items: center; flex-wrap: wrap; }
+.rc-table .tw .extra label { display: flex; align-items: center; gap: var(--sp-2); margin: 0; }
+.rc-table .tw .extra input { width: 90px; display: inline-block; margin: 0; background: var(--field); color: var(--ink); border: 1px solid var(--line-ctl); border-radius: var(--r-md); padding: var(--sp-1) var(--sp-2); font: inherit; color-scheme: var(--scheme); }
+.rc-table .tw .hints { margin: 0 var(--sp-6) var(--sp-5); padding: var(--sp-4) var(--sp-5); border-radius: var(--r-lg); background: var(--shade); font-size: var(--fs-base); line-height: 1.6; }
+.rc-table .tw .hints .warn { color: var(--bad); }
+.rc-table .tw .hints .ok { color: var(--ok); }
+.rc-table .tw-ft { display: flex; flex-wrap: wrap; gap: var(--sp-3); justify-content: flex-end; align-items: center; padding: var(--sp-5) var(--sp-6); border-top: 1px solid var(--line); background: var(--shade); }
+.rc-table .tw-ft .muted { margin-right: auto; font-size: var(--fs-md); }
+.rc-table .tw-banner { background: var(--gold-wash); border-bottom: 1px solid var(--gold-line); color: var(--gold); padding: 9px var(--sp-6); font-weight: 700; }
+.rc-table .tw .hist { margin: 0 var(--sp-6) var(--sp-5); font-size: var(--fs-md); color: var(--mute); }
+.rc-table .tw .hist div { border-left: 2px solid var(--line); padding: 2px 0 2px var(--sp-3); }
+.rc-table .tw .hist div.now { color: var(--ink); border-color: var(--gold); }
+.rc-table .tw .tk-cols { grid-template-columns: auto 1fr; gap: var(--sp-6); }
+.rc-table .tw .tk-opts { display: flex; flex-direction: column; justify-content: center; gap: var(--sp-3); font-size: var(--fs-body); line-height: 1.5; }
+
+/* ============================================================================================================================
+   PRINT - Rentcraft's printed pieces: deeds, group colours, mini cards, drawn cards. They do not change with the palette.
+   ============================================================================================================================ */
+.rc-table .grp-brown { --g: var(--print-rc-brown); --g-ink: var(--print-rc-white); }
+.rc-table .grp-light_blue { --g: var(--print-rc-light-blue); --g-ink: var(--print-rc-ink-dark); }
+.rc-table .grp-pink { --g: var(--print-rc-pink); --g-ink: var(--print-rc-white); }
+.rc-table .grp-orange { --g: var(--print-rc-orange); --g-ink: var(--print-rc-white); }
+.rc-table .grp-red { --g: var(--print-rc-red); --g-ink: var(--print-rc-white); }
+.rc-table .grp-yellow { --g: var(--print-rc-yellow); --g-ink: var(--print-rc-ink-dark); }
+.rc-table .grp-green { --g: var(--print-rc-green); --g-ink: var(--print-rc-white); }
+.rc-table .grp-dark_blue { --g: var(--print-rc-dark-blue); --g-ink: var(--print-rc-white); }
+.rc-table .grp-station { --g: var(--print-rc-station); --g-ink: var(--print-rc-white); }
+.rc-table .grp-special { --g: var(--print-rc-special); --g-ink: var(--print-rc-white); }
+
+.rc-table .deed { width: 270px; background: var(--print-rc-paper); color: var(--print-rc-ink); border-radius: var(--r-sm); box-shadow: 0 6px 20px var(--shadow); font-family: var(--print-rc-font); overflow: hidden; }
+.rc-table .deed .hd { margin: 8px 8px 6px; padding: 10px 6px; text-align: center; background: var(--g); color: var(--g-ink); font-weight: 700; font-size: var(--fs-4xl); text-transform: uppercase; border: 1px solid var(--print-rc-edge); line-height: 1.1; }
+.rc-table .deed .hd small { display: block; font-size: var(--fs-sm); font-weight: 600; letter-spacing: 0.1em; margin-bottom: 3px; }
+.rc-table .deed .price { text-align: center; font: 700 var(--fs-4xl) var(--print-rc-font-plain); margin: 4px 0 6px; }
+.rc-table .deed .sub { font-size: var(--fs-body); padding: 0 14px 2px; color: var(--print-rc-ink-soft); }
+.rc-table .deed table { width: 100%; border-collapse: collapse; font-size: 15.5px; }
+.rc-table .deed td { padding: 3px 14px; }
+.rc-table .deed td:last-child { text-align: right; font-weight: 600; white-space: nowrap; }
+.rc-table .deed tr.now td { background: var(--print-rc-now); font-weight: 700; }
+.rc-table .deed tr.now td:first-child { box-shadow: inset 4px 0 0 var(--print-rc-now-edge); }
+.rc-table .deed .nowbox { margin: 6px 10px 0; padding: 6px 8px; border-radius: var(--r-xs); background: var(--print-rc-note); border: 1px solid var(--print-rc-note-line); text-align: center; font: var(--fs-xl) var(--print-rc-font-plain); }
+.rc-table .deed .nowbox.free { background: var(--print-rc-free); border-color: var(--print-rc-free-line); }
+.rc-table .deed .nowbox.mort { background: var(--print-rc-mort); border-color: var(--print-rc-mort-line); color: var(--print-rc-mort-ink); }
+.rc-table .deed .ft { font-size: var(--fs-body); text-align: center; padding: 8px 8px 10px; color: var(--print-rc-ink-dim); border-top: 1px solid var(--print-rc-rule); margin-top: 4px; line-height: 1.4; }
+.rc-table .deed .ft.big { font-size: 15px; border-top: none; }
+
+.rc-table .mc { width: 62px; height: 80px; border-radius: var(--r-xs); background: var(--print-rc-paper); color: var(--print-rc-ink-dark); font-family: var(--print-rc-font); font-size: 8.5px; font-weight: 700; overflow: hidden; position: relative; cursor: pointer; box-shadow: var(--sh-1); border: 1px solid var(--line); transition: transform 0.12s; padding: 0; text-align: left; display: block; }
+.rc-table .mc:not(.dim):hover { transform: translateY(-3px) scale(1.06); }
+.rc-table .mc .h { height: 17px; background: var(--g); color: var(--g-ink); }
+.rc-table .mc .n { padding: 3px 4px; line-height: 1.1; text-transform: uppercase; }
+.rc-table .mc .p { position: absolute; bottom: 3px; left: 4px; font-family: var(--print-rc-font-plain); font-size: 9px; font-weight: 600; color: var(--print-rc-price); }
+.rc-table .mc.sel { outline: 3px solid var(--gold); outline-offset: 1px; }
+.rc-table .mc.dim { opacity: 0.35; cursor: not-allowed; }
+.rc-table .mc.mort::after { content: "MORTGAGED"; position: absolute; top: 38px; left: -2px; right: -2px; background: var(--print-rc-mort-band); color: var(--print-rc-white); font-size: 7px; text-align: center; transform: rotate(-12deg); }
+
+.rc-table .card-show { position: absolute; inset: 0; z-index: 35; display: flex; align-items: center; justify-content: center; pointer-events: none; perspective: 1200px; }
+.rc-table .cs-card { width: min(340px, 82%); aspect-ratio: 1.55; pointer-events: auto; cursor: pointer; animation: csFly 0.55s cubic-bezier(0.2, 0.8, 0.3, 1.1) both; }
+.rc-table .cs-inner { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; animation: csFlip 0.6s 0.45s ease-in-out both; }
+.rc-table .cs-back, .rc-table .cs-front { position: absolute; inset: 0; border-radius: var(--r-2xl); backface-visibility: hidden; box-shadow: 0 24px 60px var(--shadow); }
+.rc-table .cs-back { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--sp-1); color: var(--print-rc-white); font: 800 var(--fs-3xl) var(--font-serif); letter-spacing: 0.12em; }
+.rc-table .cs-back span { font-size: 64px; line-height: 1; }
+.rc-table .cs-front { transform: rotateY(180deg); background: var(--print-rc-paper); color: var(--print-rc-ink); display: flex; flex-direction: column; padding: 12px 18px 14px; border: 6px solid; }
+.rc-table .cs-hd { font: 800 var(--fs-body) var(--font-serif); letter-spacing: 0.14em; text-transform: uppercase; text-align: center; padding-bottom: var(--sp-2); border-bottom: 2px solid; }
+.rc-table .cs-text { flex: 1; display: flex; align-items: center; justify-content: center; text-align: center; font: 600 17px/1.35 var(--font-serif); padding: var(--sp-3) 0; }
+.rc-table .cs-who { display: flex; align-items: center; justify-content: center; gap: var(--sp-2); font-size: var(--fs-base); color: var(--print-rc-ink-soft); }
+.rc-table .cs-card.chance .cs-back { background: linear-gradient(135deg, var(--print-rc-chance-a), var(--print-rc-chance-b)); }
+.rc-table .cs-card.chance .cs-front { border-color: var(--print-rc-chance-edge); }
+.rc-table .cs-card.chance .cs-hd { color: var(--print-rc-chance-ink); border-color: var(--print-rc-chance-edge); }
+.rc-table .cs-card.chest .cs-back { background: linear-gradient(135deg, var(--print-rc-chest-a), var(--print-rc-chest-b)); }
+.rc-table .cs-card.chest .cs-front { border-color: var(--print-rc-chest-edge); }
+.rc-table .cs-card.chest .cs-hd { color: var(--print-rc-chest-ink); border-color: var(--print-rc-chest-edge); }
+.rc-table .card-show.out .cs-card { animation: csOut 0.25s ease-in both; }
+@keyframes csFly { from { transform: translate(0, 30vh) scale(0.35) rotate(-14deg); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes csFlip { from { transform: rotateY(0); } to { transform: rotateY(180deg); } }
+@keyframes csOut { to { transform: scale(0.85); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .rc-table .cs-card, .rc-table .cs-inner { animation-duration: 0.01s; animation-delay: 0s; } }
+
+/* ---------- phone: board on top, the game panel at the bottom ---------- */
+@container (max-width: 759px) {
+  .rc-table .hud { top: auto; left: var(--sp-3); right: var(--sp-3); bottom: var(--sp-3); width: auto; max-height: 46dvh; gap: var(--sp-3); }
+  .rc-table .hint { display: none; }
+  .rc-table .rc-top { max-width: calc(100% - 16px); flex-wrap: nowrap; }
+  .rc-table .scene-notice { bottom: auto; top: 60px; left: var(--sp-3); right: var(--sp-3); max-width: none; }
+  .rc-table .rc-replay { left: var(--sp-3); right: var(--sp-3); bottom: calc(46dvh + 16px); }
+  .rc-table .autopilot-bar { top: 52px; left: var(--sp-3); max-width: calc(100% - 24px); }
+  .rc-table .tw-cols { grid-template-columns: 1fr; }
+  .rc-table .tw-swap { transform: rotate(90deg); }
+  .rc-table .seat-tag { font-size: var(--fs-xs); padding: 2px 7px 2px 3px; gap: var(--sp-1); }
+  .rc-table .seat-tag .an { width: 18px; height: 18px; font-size: var(--fs-sm); }
+  .rc-table .seat-tag .nm { max-width: 70px; }
+  .rc-table .seat-tag.me { font-size: var(--fs-base); }
+  .rc-table .seat-tag.me .an { width: 22px; height: 22px; font-size: var(--fs-body); }
+  .rc-table .seat-tag.me .cash { font-size: var(--fs-body); }
+  .rc-table .tip { max-height: calc(54% - 16px); overflow-y: auto; z-index: 12; }
+  .rc-table .tip .owner-badge { padding: var(--sp-1) var(--sp-3); margin-bottom: var(--sp-1); }
+  .rc-table .tip .deed .hd { font-size: 15px; padding: var(--sp-2); margin: 6px 6px 4px; }
+  .rc-table .tip .deed .price { font-size: 15px; margin: 2px 0 3px; }
+  .rc-table .tip .deed table { font-size: var(--fs-lg); }
+  .rc-table .tip .deed td { padding: 1px 12px; }
+  .rc-table .tip .deed .nowbox { font-size: var(--fs-base); padding: 4px 6px; }
+  .rc-table .tip .deed .ft { font-size: var(--fs-sm); padding: 5px 6px 6px; }
+}
+.rc-table .mind .probs { display: flex; flex-direction: column; gap: 3px; margin-top: var(--sp-2); }
+.rc-table .mind .prob { position: relative; display: flex; justify-content: space-between; font-size: var(--fs-md); padding: 3px var(--sp-2); border-radius: var(--r-sm); overflow: hidden; background: var(--btn); }
+.rc-table .mind .prob i { position: absolute; inset: 0 auto 0 0; background: var(--info-line); }
+.rc-table .mind .prob.on i { background: var(--bar); }
+.rc-table .mind .prob span, .rc-table .mind .prob b { position: relative; }
+.rc-table .mind .expl { font-style: italic; }

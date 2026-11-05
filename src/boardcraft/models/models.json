@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "models": [
+    {
+      "choice_id": "rentcraft-mini-evo5",
+      "metadata": "rentcraft-mini-evo5/metadata.json",
+      "weights": "rentcraft-mini-evo5/weights.npz"
+    },
+    {
+      "choice_id": "rentcraft-njord-gen0",
+      "metadata": "rentcraft-njord-gen0/metadata.json",
+      "weights": "rentcraft-njord-gen0/weights.npz"
+    },
+    {
+      "choice_id": "rentcraft-hodr",
+      "metadata": "rentcraft-hodr/metadata.json",
+      "weights": "rentcraft-hodr/weights.npz"
+    }
+  ]
+}

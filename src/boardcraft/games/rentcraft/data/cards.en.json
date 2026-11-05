@@ -1,0 +1,294 @@
+{
+  "opportunity": [
+    {
+      "id": 0,
+      "deck": "opportunity",
+      "text": "Take a walk to the castle. Advance to Castle Square.",
+      "effect": "advance_to",
+      "value": 0,
+      "value2": 0,
+      "target": 39
+    },
+    {
+      "id": 1,
+      "deck": "opportunity",
+      "text": "Return to Start and collect $200.",
+      "effect": "advance_to",
+      "value": 0,
+      "value2": 0,
+      "target": 0
+    },
+    {
+      "id": 2,
+      "deck": "opportunity",
+      "text": "Take a trip to the coast. Advance to Fishermen's Boulevard and collect $200 if you pass Start.",
+      "effect": "advance_to",
+      "value": 0,
+      "value2": 0,
+      "target": 24
+    },
+    {
+      "id": 3,
+      "deck": "opportunity",
+      "text": "Market day! Advance to Market Square and collect $200 if you pass Start.",
+      "effect": "advance_to",
+      "value": 0,
+      "value2": 0,
+      "target": 11
+    },
+    {
+      "id": 4,
+      "deck": "opportunity",
+      "text": "Advance to the next station. Pay double rent if another player owns it.",
+      "effect": "advance_nearest_railroad",
+      "value": 0,
+      "value2": 0,
+      "target": null
+    },
+    {
+      "id": 5,
+      "deck": "opportunity",
+      "text": "Advance to the next station. Pay double rent if another player owns it.",
+      "effect": "advance_nearest_railroad",
+      "value": 0,
+      "value2": 0,
+      "target": null
+    },
+    {
+      "id": 6,
+      "deck": "opportunity",
+      "text": "Advance to the next utility. If another player owns it, roll two dice and pay ten times their sum.",
+      "effect": "advance_nearest_utility",
+      "value": 0,
+      "value2": 0,
+      "target": null
+    },
+    {
+      "id": 7,
+      "deck": "opportunity",
+      "text": "The bank pays you a $50 dividend.",
+      "effect": "collect",
+      "value": 50,
+      "value2": 0,
+      "target": null
+    },
+    {
+      "id": 8,
+      "deck": "opportunity",
+      "text": "Jail release card. Keep this card until you use it or trade it.",
+      "effect": "jail_free",
+      "value": 0,
+      "value2": 0,
+      "target": null
+    },
+    {
+      "id": 9,
+      "deck": "opportunity",
+      "text": "Go back three spaces.",
+      "effect": "back_three",
+      "value": 0,
+      "value2": 0,
+      "target": null
+    },
+    {
+      "id": 10,
+      "deck": "opportunity",
+      "text": "Go directly to jail. Skip the Start salary.",
+      "effect": "go_to_jail",
+      "value": 0,
+      "value2": 0,
+      "target": null
+    },
+    {
+      "id": 11,
+      "deck": "opportunity",
+      "text": "Make repairs to your properties. Pay $25 per house and $100 per hotel.",
+      "effect": "repairs",
+      "value": 25,
+      "value2": 100,
+      "target": null
+    },
+    {
+      "id": 12,
+      "deck": "opportunity",
+      "text": "Pay a $15 speeding fine.",
+      "effect": "pay",
+      "value": 15,
+      "value2": 0,
+      "target": null
+    },
+    {
+      "id": 13,
+      "deck": "opportunity",
+      "text": "Take the train to West Station. Collect $200 if you pass Start.",
+      "effect": "advance_to",
+      "value": 0,
+      "value2": 0,
+      "target": 5
+    },
+    {
+      "id": 14,
+      "deck": "opportunity",
+      "text": "You chair the board. Pay each other player $50.",
+      "effect": "pay_each",
+      "value": 50,
+      "value2": 0,
+      "target": null
+    },
+    {
+      "id": 15,
+      "deck": "opportunity",
+      "text": "Your building loan matures. Collect $150.",
+      "effect": "collect",
+      "value": 150,
+      "value2": 0,
+      "target": null
+    }
+  ],
+  "community_fund": [
+    {
+      "id": 0,
+      "deck": "community_fund",
+      "text": "Advance to Start and collect $200.",
+      "effect": "advance_to",
+      "value": 0,
+      "value2": 0,
+      "target": 0
+    },
+    {
+      "id": 1,
+      "deck": "community_fund",
+      "text": "A bank error puts $200 in your favor. Collect it.",
+      "effect": "collect",
+      "value": 200,
+      "value2": 0,
+      "target": null
+    },
+    {
+      "id": 2,
+      "deck": "community_fund",
+      "text": "Pay $50 for a doctor's visit.",
+      "effect": "pay",
+      "value": 50,
+      "value2": 0,
+      "target": null
+    },
+    {
+      "id": 3,
+      "deck": "community_fund",
+      "text": "Collect $50 from the sale of your shares.",
+      "effect": "collect",
+      "value": 50,
+      "value2": 0,
+      "target": null
+    },
+    {
+      "id": 4,
+      "deck": "community_fund",
+      "text": "Jail release card. Keep this card until you use it or trade it.",
+      "effect": "jail_free",
+      "value": 0,
+      "value2": 0,
+      "target": null
+    },
+    {
+      "id": 5,
+      "deck": "community_fund",
+      "text": "Go directly to jail. Skip the Start salary.",
+      "effect": "go_to_jail",
+      "value": 0,
+      "value2": 0,
+      "target": null
+    },
+    {
+      "id": 6,
+      "deck": "community_fund",
+      "text": "Your holiday fund matures. Collect $100.",
+      "effect": "collect",
+      "value": 100,
+      "value2": 0,
+      "target": null
+    },
+    {
+      "id": 7,
+      "deck": "community_fund",
+      "text": "Collect a $20 tax refund.",
+      "effect": "collect",
+      "value": 20,
+      "value2": 0,
+      "target": null
+    },
+    {
+      "id": 8,
+      "deck": "community_fund",
+      "text": "It's your birthday! Collect $10 from each other player.",
+      "effect": "collect_each",
+      "value": 10,
+      "value2": 0,
+      "target": null
+    },
+    {
+      "id": 9,
+      "deck": "community_fund",
+      "text": "Collect $100 from a life insurance policy.",
+      "effect": "collect",
+      "value": 100,
+      "value2": 0,
+      "target": null
+    },
+    {
+      "id": 10,
+      "deck": "community_fund",
+      "text": "Pay a $100 hospital bill.",
+      "effect": "pay",
+      "value": 100,
+      "value2": 0,
+      "target": null
+    },
+    {
+      "id": 11,
+      "deck": "community_fund",
+      "text": "Pay $50 in tuition fees.",
+      "effect": "pay",
+      "value": 50,
+      "value2": 0,
+      "target": null
+    },
+    {
+      "id": 12,
+      "deck": "community_fund",
+      "text": "Collect a $25 consulting fee.",
+      "effect": "collect",
+      "value": 25,
+      "value2": 0,
+      "target": null
+    },
+    {
+      "id": 13,
+      "deck": "community_fund",
+      "text": "Contribute to street repairs. Pay $40 per house and $115 per hotel.",
+      "effect": "repairs",
+      "value": 40,
+      "value2": 115,
+      "target": null
+    },
+    {
+      "id": 14,
+      "deck": "community_fund",
+      "text": "You take second place in a beauty contest. Collect $10.",
+      "effect": "collect",
+      "value": 10,
+      "value2": 0,
+      "target": null
+    },
+    {
+      "id": 15,
+      "deck": "community_fund",
+      "text": "Inherit $100.",
+      "effect": "collect",
+      "value": 100,
+      "value2": 0,
+      "target": null
+    }
+  ]
+}

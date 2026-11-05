@@ -1,0 +1,248 @@
+/* ============================================================================================================================
+   TABLE CHROME - ONE look for everything that sits over a game's 3D table (game bar, side panels / HUD cards, seat tags,
+   tips, logs, dialogs, toasts, the replay timeline, buttons, badges). Every rule is scoped to a table screen (`.tc-screen`),
+   so the platform pages are not touched. Colours come from ui/tokens.css (the `--tc-*` group follows the palette).
+   What this file does NOT touch: the 3D scene and printed game content (deeds, card faces, the Dice paper sheet, dice).
+
+   HOW A GAME USES IT
+     1. Game bar:     mountGameBar(...) from ui/gamebar.ts                       → `.tc-bar`
+     2. Panels / HUD: `.hud > .panel > h4 + content` or any element with `.tc-panel`
+     3. Buttons:      `.btn` (+ `.pri` `.gold` `.ok` `.sm` `.resign`)
+     4. Pills / tags: `.tc-pill` (status line, seat tag) with `--pc` from `.pc-N`
+     5. Dialogs:      confirmDialog(...), rulesDialog(...) or `.modal > .modal-box`; toasts: toast(...)
+     6. A game's own DOM is mapped onto the same tokens in one small block at the end of this file, never new colours.
+   ============================================================================================================================ */
+:root {
+  --print-dice-mark-bg: #16302b; --print-dice-mark-fg: #9fe0cf; --print-dice-die-ink: #20372b;
+}
+.tc-screen { font: var(--fs-body) var(--font-ui); color: var(--tc-ink); }
+.tc-screen *, .tc-screen *::before, .tc-screen *::after { box-sizing: border-box; }
+.tc-screen [hidden] { display: none !important; }
+.tc-screen :focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
+
+/* ---------- primitives ---------- */
+.tc-screen .muted { color: var(--mute); }
+.tc-screen .btn { border: none; border-radius: var(--r-md); padding: var(--btn-py) var(--btn-px); font: 700 var(--fs-lg) var(--font-ui); cursor: pointer; background: var(--btn); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); text-decoration: none; display: inline-block; margin: 0; min-height: 0; line-height: 1.3; }
+.tc-screen .btn:hover:not(:disabled) { filter: var(--hover); }
+.tc-screen .btn:disabled { opacity: 0.45; cursor: default; }
+.tc-screen .btn.pri { background: var(--btn-pri-bg); color: var(--on-pri); box-shadow: var(--btn-pri-edge); }
+.tc-screen .btn.gold { background: var(--btn-gold-bg); color: var(--on-gold); box-shadow: var(--btn-gold-edge); }
+.tc-screen .btn.ok { background: var(--btn-ok-bg); color: var(--on-accent); }
+.tc-screen .btn.bid { background: var(--ok-bg); box-shadow: inset 0 0 0 1px var(--ok-line); }
+.tc-screen .btn.resign { background: var(--bad-bg); color: var(--bad); box-shadow: inset 0 0 0 1px var(--bad-line); }
+.tc-screen .btn.bankrupt { background: var(--bankrupt); color: var(--on-accent); box-shadow: inset 0 0 0 1px var(--bankrupt-line); }
+.tc-screen .btn.sm, .tc-screen .btn.small { padding: 6px 10px; font-size: var(--fs-md); }
+.tc-screen .btns { display: flex; gap: var(--sp-2); flex-wrap: wrap; align-items: center; }
+.tc-screen .btns.end { justify-content: flex-end; margin-top: 14px; }
+.tc-screen .tag { font-size: var(--fs-2xs); padding: 1px 6px; border-radius: var(--r-sm); background: var(--wash); color: var(--mute); font-weight: 600; white-space: nowrap; margin-left: 5px; }
+.tc-screen .tag.out { background: var(--bad-wash); color: var(--bad); }
+.tc-screen .tag.auto { background: var(--violet-wash); color: var(--violet); }
+.tc-screen .chip { display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px 3px 4px; border-radius: var(--r-pill); background: var(--wash); font: var(--fs-md) var(--font-ui); color: var(--ink); border: 1px solid transparent; }
+.tc-screen button.chip { cursor: pointer; }
+.tc-screen .chip.on { border-color: var(--gold); background: var(--gold-wash); }
+.tc-screen .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; }
+.tc-screen .pcbg { background: var(--pc); }
+.tc-screen .pc-0 { --pc: var(--seat-1); } .tc-screen .pc-1 { --pc: var(--seat-2); } .tc-screen .pc-2 { --pc: var(--seat-3); } .tc-screen .pc-3 { --pc: var(--seat-4); }
+.tc-screen .seg { display: inline-flex; gap: 2px; }
+.tc-screen .seg button { background: var(--btn); color: var(--mute); border: 1px solid var(--line); font-size: var(--fs-base); padding: 3px var(--sp-3); cursor: pointer; }
+.tc-screen .seg button.on { background: var(--gold-wash); color: var(--gold); }
+.tc-screen .logo { font: 800 var(--fs-body) var(--font-serif); letter-spacing: 0.06em; background: var(--red); color: var(--on-accent); padding: 1px 9px; transform: rotate(-3deg); box-shadow: 0 2px 0 var(--red-edge); display: inline-block; }
+.tc-screen .gbadge { display: inline-flex; align-items: center; gap: var(--sp-2); font-weight: 700; color: var(--ink); }
+.tc-screen table.rank { border-collapse: collapse; margin: var(--sp-2) 0; }
+.tc-screen .rank td { padding: var(--sp-1) var(--sp-4); }
+.tc-screen .rank .d { display: inline-block; width: 10px; height: 10px; border-radius: 50%; }
+.tc-screen .kv { display: grid; grid-template-columns: auto 1fr; gap: 2px var(--sp-4); margin: var(--sp-2) 0; }
+.tc-screen .kv dt { color: var(--mute); } .tc-screen .kv dd { margin: 0; }
+
+/* notes in the decision panel: one look with three tokens */
+.tc-screen :is(.window-info, .trade-info, .deadline-info, .debt-info, .autopilot-info, .tw-error) {
+  --n-bg: var(--info-wash); --n-line: var(--info-line); --n-ink: var(--ink);
+  background: var(--n-bg); border: 1px solid var(--n-line); color: var(--n-ink); border-radius: var(--r-md); padding: 6px 9px; font-size: var(--fs-lg); line-height: 1.45; margin: var(--sp-2) 0;
+}
+.tc-screen :is(.window-info, .trade-info) { --n-bg: var(--warn-wash); --n-line: var(--warn-line); }
+.tc-screen .deadline-info { --n-bg: var(--teal-wash); --n-line: var(--teal-line); }
+.tc-screen .deadline-info.urgent { --n-bg: var(--bad-wash); --n-line: var(--bad-line); }
+.tc-screen .debt-info { --n-bg: var(--bad-wash-soft); --n-line: var(--bad-line-soft); }
+.tc-screen .autopilot-info { --n-bg: var(--violet-wash); --n-line: var(--violet-line); }
+.tc-screen .tw-error { --n-bg: var(--bad-bg); --n-line: var(--bad); --n-ink: var(--bad); margin: 0 var(--sp-6) var(--sp-4); }
+
+/* ---------- panels ---------- */
+.tc-screen :is(.tc-panel, .panel, .tc-bar, .hint, .timeline, .tip-note, .owner-badge) {
+  background: var(--tc-panel); border: 1px solid var(--tc-line); border-radius: var(--tc-radius); box-shadow: var(--tc-shadow); backdrop-filter: var(--tc-blur); color: var(--tc-ink);
+}
+.tc-screen :is(.tc-panel, .panel) h4 { margin: 0 0 var(--sp-3); font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--tc-mute); }
+.tc-screen .panel { padding: var(--sp-4) var(--sp-5); }
+.tc-screen .hint { padding: 5px var(--sp-4); font-size: var(--fs-md); color: var(--tc-mute); border-radius: var(--r-lg); box-shadow: var(--tc-shadow-sm); }
+.tc-screen .tip-note { color: var(--tc-mute); border-radius: var(--r-lg); box-shadow: var(--tc-shadow-sm); }
+.tc-screen .owner-badge { border-radius: 9px; box-shadow: inset 4px 0 0 var(--pc, transparent), var(--tc-shadow-sm); border-color: var(--pc, var(--tc-line)); }
+
+/* ---------- game bar ---------- */
+.tc-screen .tc-bar { position: absolute; z-index: 7; left: var(--sp-5); top: var(--sp-5); display: flex; align-items: center; gap: var(--sp-4); padding: var(--sp-2) var(--sp-4); font-size: var(--fs-body); max-width: calc(100% - 2 * var(--sp-5)); }
+.tc-screen .tc-bar .btn { white-space: nowrap; flex: none; }
+.tc-screen .tc-bar .title { display: inline-flex; align-items: center; gap: var(--sp-3); font-weight: 700; min-width: 0; white-space: nowrap; }
+.tc-screen .tc-bar .title > span:last-child { overflow: hidden; text-overflow: ellipsis; }
+.tc-screen .tc-bar .conn { font-size: var(--fs-md); color: var(--tc-mute); white-space: nowrap; }
+.tc-screen .tc-bar .conn:empty, .tc-screen .tc-bar .tc-extra:empty { display: none; }
+.tc-screen .tc-bar .tc-extra { display: inline-flex; gap: var(--sp-2); }
+
+/* the host stage: a container for the phone rules, and the loading note under the bar */
+.bc-stage.tc-screen { container-type: inline-size; }
+.bc-stage.tc-screen > section.bc-panel { position: absolute; top: 72px; left: var(--sp-5); padding: var(--sp-3) var(--sp-4); }
+
+/* ---------- pills ---------- */
+.tc-screen :is(.tc-pill, .seat-tag) { background: var(--tc-panel); color: var(--tc-ink); border: 2px solid var(--pc, var(--tc-line)); border-radius: var(--r-pill); box-shadow: var(--tc-shadow-sm); backdrop-filter: var(--tc-blur); }
+.tc-screen .tc-pill { display: inline-flex; align-items: center; gap: var(--sp-2); padding: 5px 13px; font-size: var(--fs-base); border-width: 1px; }
+.tc-screen .seat-tag.act { box-shadow: 0 0 0 3px var(--gold-ring), var(--tc-shadow-sm); }
+
+/* ---------- dialogs, toasts ---------- */
+.tc-screen .modal { position: absolute; inset: 0; background: var(--overlay); display: flex; align-items: center; justify-content: center; z-index: 40; padding: var(--sp-4); }
+.tc-screen .modal.soft { background: var(--overlay-soft); pointer-events: none; }
+.tc-screen .modal.soft .modal-box { pointer-events: auto; }
+.tc-screen .modal.tw { z-index: 50; }
+.tc-screen .modal.confirm { z-index: 60; }
+.tc-screen .modal.confirm p { line-height: 1.5; }
+.tc-screen :is(.modal-box, .tw-win) { background: var(--tc-solid); border: 1px solid var(--tc-line); border-radius: var(--r-2xl); box-shadow: var(--tc-shadow-lg); color: var(--tc-ink); }
+.tc-screen .modal-box { padding: 18px var(--sp-7); max-width: 560px; max-height: 100%; overflow: auto; }
+.tc-screen .modal-box h3 { margin: 0 0 var(--sp-3); }
+.tc-screen .modal-box.rules { max-width: 760px; width: 100%; line-height: 1.5; }
+.tc-screen .modal-box.rules .close { float: right; }
+.tc-screen .modal-box.rules .rules-text { overflow-wrap: anywhere; font: var(--fs-lg)/1.55 var(--font-ui); margin: var(--sp-3) 0 0; }
+.tc-screen .modal-box.rules .rules-text h1 { font-size: var(--fs-3xl); } .tc-screen .modal-box.rules .rules-text table { border-collapse: collapse; } .tc-screen .modal-box.rules .rules-text td, .tc-screen .modal-box.rules .rules-text th { border-bottom: 1px solid var(--line); padding: 4px 8px; text-align: left; }
+.tc-screen .toast { position: absolute; left: 50%; bottom: 40px; transform: translateX(-50%); z-index: 30; padding: var(--sp-4) var(--sp-6); background: var(--tc-solid); color: var(--tc-ink); border: 1px solid var(--tc-line); border-left: 4px solid var(--gold); border-radius: var(--r-lg); box-shadow: var(--tc-shadow); font-size: var(--fs-body); max-width: min(520px, calc(100% - 24px)); }
+.tc-screen .scene-notice { position: absolute; left: 14px; bottom: 52px; z-index: 50; max-width: 420px; margin: 0; padding: var(--sp-3) var(--sp-4); background: var(--tc-solid); border: 1px solid var(--bad-line); border-left: 4px solid var(--bad); border-radius: var(--r-lg); box-shadow: var(--tc-shadow-sm); }
+
+/* ---------- replay timeline (host-owned, shared by every game) ---------- */
+.tc-screen .timeline { padding: var(--sp-3) var(--sp-5); pointer-events: auto; }
+.tc-screen .tl-btns { display: flex; gap: var(--sp-2); align-items: center; flex-wrap: wrap; }
+.tc-screen .tl-btns select { width: auto; margin: 0; padding: var(--sp-1) var(--sp-2); background: var(--field); color: var(--ink); border: 1px solid var(--line-ctl); border-radius: var(--r-md); font: inherit; color-scheme: var(--scheme); }
+.tc-screen .tl-pos { font-variant-numeric: tabular-nums; }
+.tc-screen .tl-track { position: relative; margin-top: var(--sp-3); }
+.tc-screen .tl-track input { width: 100%; margin: 0; padding: 0; accent-color: var(--gold); display: block; }
+.tc-screen .tl-events { margin-top: var(--sp-2); font-size: var(--fs-md); color: var(--tc-mute); max-height: 3.2em; overflow: hidden; }
+.tc-screen .tl-events:empty { display: none; }
+.tc-screen .timeline.loading .tl-pos::after { content: " · loading…"; color: var(--tc-mute); }
+
+/* ---------- the waiting board (a table that has not started) ---------- */
+.tc-screen .bc-lobby-overlay { background: var(--tc-solid); border: 1px solid var(--tc-line); border-radius: var(--r-2xl); box-shadow: var(--tc-shadow-lg); color: var(--tc-ink); font: var(--fs-body) var(--font-ui); }
+.tc-screen .bc-lobby-overlay h2 { font: 700 var(--fs-xl) var(--font-ui); }
+.tc-screen .bc-lobby-overlay button { border: none; border-radius: var(--r-md); padding: var(--btn-py) var(--btn-px); font: 700 var(--fs-md) var(--font-ui); cursor: pointer; background: var(--btn); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
+.tc-screen .bc-lobby-overlay button.bc-primary { background: var(--btn-pri-bg); color: var(--on-pri); box-shadow: var(--btn-pri-edge); }
+.tc-screen .bc-lobby-overlay button:disabled { opacity: 0.45; cursor: default; }
+.tc-screen .bc-lobby-overlay .bc-lobby-seat { display: flex; align-items: center; gap: var(--sp-3); border-top: 1px solid var(--line); }
+.tc-screen .bc-lobby-overlay .bc-lobby-seat span { color: var(--tc-mute); }
+.tc-screen .bc-lobby-overlay .bc-small, .tc-screen .bc-lobby-overlay small { color: var(--tc-mute); }
+.tc-screen .bc-lobby-overlay .bc-copy-text { background: var(--field); color: var(--ink); border-color: var(--line-ctl); }
+.tc-screen .bc-lobby-pill { border: 1px solid var(--tc-line); border-radius: var(--r-pill); background: var(--tc-panel); color: var(--tc-ink); padding: 5px 13px; font: 700 var(--fs-md) var(--font-ui); box-shadow: var(--tc-shadow-sm); cursor: pointer; }
+
+/* phone: the bar stays ONE row: Rules and Surrender shrink to their icons */
+@container (max-width: 760px) {
+  .tc-screen .tc-bar { flex-wrap: nowrap; gap: var(--sp-2); padding: var(--sp-1) var(--sp-2); left: var(--sp-3); top: var(--sp-3); max-width: calc(100% - 16px); }
+  .tc-screen .tc-bar .conn, .tc-screen .tc-bar .lbl { display: none; }
+  .tc-screen .tc-bar .title { font-size: var(--fs-lg); gap: 5px; }
+  .tc-screen .tc-bar .btn.sm { padding: var(--sp-2) 9px; }
+}
+
+/* ============================================================================================================================
+   Dice Circuit: the canonical view's own `.bc-*` classes mapped onto the tokens above (its DOM stays; only paint changes).
+   ============================================================================================================================ */
+.bc-game.dice-stage { container-type: inline-size; }
+.dice-stage .bc-panel, .dice-stage .bc-failure {
+  background: var(--tc-panel); border: 1px solid var(--tc-line); border-radius: var(--tc-radius); box-shadow: var(--tc-shadow); backdrop-filter: var(--tc-blur); color: var(--tc-ink);
+}
+.bc-game.dice-stage { color: var(--tc-ink); }
+.dice-stage .bc-hint, .dice-stage .bc-chain, .dice-stage .bc-resource { color: var(--tc-mute); }
+.dice-stage .bc-resource { border-color: var(--tc-line); }
+.dice-stage .bc-targets, .dice-stage .bc-chain { border-top-color: var(--tc-line); }
+.dice-stage .bc-score span { color: var(--tc-mute); font-weight: 700; }
+.dice-stage .bc-status {
+  top: 62px; background: var(--tc-panel); color: var(--tc-ink); border: 1px solid var(--tc-line); border-radius: var(--r-pill); box-shadow: var(--tc-shadow-sm); backdrop-filter: var(--tc-blur); font-weight: 600; font-size: var(--fs-base); padding: 5px 13px;
+}
+.bc-game.dice-stage button:not(.bc-die-button):not(.bc-target) {
+  min-height: 0; padding: var(--sp-3) var(--sp-5); border: none; border-radius: var(--r-md); background: var(--btn); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); font: 700 var(--fs-lg) var(--font-ui);
+}
+.bc-game.dice-stage button:not(.bc-die-button):not(.bc-target):not([aria-pressed="true"]):not(.bc-primary):hover:not(:disabled) { background: var(--btn); filter: var(--hover); box-shadow: inset 0 0 0 1px var(--line); }
+.bc-game.dice-stage button[aria-pressed="true"]:not(.bc-die-button), .bc-game.dice-stage button.bc-primary { background: var(--btn-gold-bg); color: var(--on-gold); box-shadow: var(--btn-gold-edge); }
+.bc-game.dice-stage button.bc-die-button { border-radius: var(--r-md); font-weight: 700; color: var(--print-dice-die-ink); }
+.bc-game.dice-stage button.bc-target { border-radius: var(--r-md); background: var(--field); color: var(--ink); border-color: var(--line); font-weight: 600; }
+.bc-game.dice-stage button.bc-target:hover:not(:disabled) { background: var(--gold-wash); }
+.bc-game.dice-stage .tc-bar .btn.sm { padding: 6px 10px; font-size: var(--fs-md); }
+.bc-game.dice-stage .tc-bar .btn.resign { background: var(--bad-bg); color: var(--bad); box-shadow: inset 0 0 0 1px var(--bad-line); }
+.dice-stage .bc-decision-title { font-weight: 700; }
+.dice-stage .bc-app-error { background: var(--bad-bg); color: var(--bad); border-color: var(--bad); }
+.dice-stage .bc-bottom > .timeline { width: 100%; }
+@container (max-width: 700px) {
+  .dice-stage .bc-status { top: 62px; left: var(--sp-3); max-width: calc(100% - 96px); }
+  .dice-stage .bc-scores { top: 62px; right: var(--sp-3); }
+}
+@container (min-width: 701px) {
+  .dice-stage .bc-scores { top: var(--sp-5); right: var(--sp-5); }
+  .dice-stage .bc-bottom { left: var(--sp-5); right: var(--sp-5); bottom: var(--sp-5); }
+  .dice-stage .bc-status { left: 14px; }
+}
+.tc-screen .bc-lobby-overlay p:empty { display: none; }
+
+/* Dice: resources and recent moves beside the sheet, and the dice strip that is visible in every camera */
+.dice-stage .bc-side { position: absolute; right: var(--sp-5); top: 104px; z-index: 2; width: min(300px, 34%); display: flex; flex-direction: column; gap: var(--sp-3); pointer-events: none; }
+.dice-stage .bc-side > * { pointer-events: auto; padding: var(--sp-3) var(--sp-4); }
+.dice-stage .bc-side h4 { margin: 0 0 var(--sp-2); font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--tc-mute); }
+.dice-stage .bc-resource-row { display: grid; grid-template-columns: 1fr auto; align-items: baseline; column-gap: var(--sp-3); padding: 2px 0; font-size: var(--fs-base); }
+.dice-stage .bc-resource-row small { grid-column: 1 / -1; color: var(--tc-mute); font-size: var(--fs-xs); }
+.dice-stage .bc-resource-row .bc-emblem { justify-self: end; }
+.dice-stage .bc-resource-row:last-child { grid-template-columns: 1fr auto auto; }
+.dice-stage .bc-resource-name { font-weight: 600; }
+.dice-stage .bc-moves-list { list-style: none; margin: 0; padding: 0; max-height: 26vh; overflow-y: auto; font-size: var(--fs-md); }
+/* A low window: the side column ends above the bottom controls (the view sets its max-height) and the moves list gives way first. */
+.dice-stage .bc-side { overflow-y: auto; overscroll-behavior: contain; }
+.dice-stage .bc-side > .bc-moves { display: flex; flex-direction: column; min-height: 0; flex-shrink: 1; }
+.dice-stage .bc-side > .bc-moves .bc-moves-list { flex: 1 1 auto; min-height: 2.2em; }
+.dice-stage .bc-side > .bc-resources, .dice-stage .bc-side > .bc-mind { flex-shrink: 0; }
+/* At a table the game fills one window like Rentcraft's table (an embedded replay keeps its own box). */
+.bc-stage:not(.bc-embedded-stage) > .bc-game.dice-stage { height: 100%; min-height: 320px; }
+.dice-stage .bc-moves-list li { padding: 2px 0; opacity: 0.8; }
+.dice-stage .bc-moves-list li:first-child { opacity: 1; font-weight: 600; }
+.dice-stage .bc-moves-list li.bc-empty { font-style: italic; color: var(--tc-mute); }
+.dice-stage .bc-dice-row { display: flex; gap: var(--sp-2); flex-wrap: wrap; }
+.bc-game.dice-stage button.bc-die-button { display: inline-grid; gap: 0; justify-items: center; line-height: 1.15; padding: var(--sp-1) var(--sp-3); min-width: 64px; }
+.dice-stage .bc-die-button strong { font-size: var(--fs-md); }
+.dice-stage .bc-die-button small { font-size: var(--fs-2xs); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.85; }
+.bc-game.dice-stage button.bc-die-button.bc-zone-tray { outline: 2px dashed var(--gold); outline-offset: 1px; }
+.bc-game.dice-stage button.bc-die-button.bc-zone-tray:not(:disabled) { outline-style: solid; box-shadow: 0 0 0 4px var(--gold-ring); }
+.bc-game.dice-stage button.bc-die-button:disabled { opacity: 0.55; }
+.dice-stage .bc-exception { color: var(--tc-ink); background: var(--warn-wash); border: 1px solid var(--warn-line); border-radius: var(--r-md); padding: 4px 8px; }
+@container (max-width: 1100px) { .dice-stage .bc-resource { display: none; } }
+@container (max-width: 700px) {
+  .dice-stage .bc-side { top: 104px; left: var(--sp-3); right: var(--sp-3); width: auto; }
+  .dice-stage .bc-moves { display: none; }
+  .dice-stage .bc-resources h4 { display: none; }
+  .dice-stage .bc-resources { display: flex; gap: var(--sp-4); flex-wrap: wrap; padding: var(--sp-2) var(--sp-3); }
+  .dice-stage .bc-resource-row small { display: none; }
+  .bc-game.dice-stage button.bc-die-button { min-width: 0; flex: 1; font-size: var(--fs-xs); }
+}
+
+/* replay marks and the small charts over a table: series colours come from the chart palette through a tone class */
+.tc-screen .tone-red { --tone: var(--chart-red); } .tc-screen .tone-amber { --tone: var(--chart-amber); } .tc-screen .tone-green { --tone: var(--chart-green); } .tc-screen .tone-silver { --tone: var(--chart-silver); }
+.tc-screen .tone-seat-0 { --tone: var(--seat-1); } .tc-screen .tone-seat-1 { --tone: var(--seat-2); } .tc-screen .tone-seat-2 { --tone: var(--seat-3); } .tc-screen .tone-seat-3 { --tone: var(--seat-4); }
+.tc-screen .ch-grid { stroke: var(--line); }
+.tc-screen .ch-cursor { stroke: var(--gold); }
+.tc-screen .ch-tick { fill: var(--mute); font-size: var(--fs-3xs); }
+.tc-screen .ch-line { fill: none; stroke: var(--tone); }
+.tc-screen .legend { display: flex; gap: var(--sp-4); flex-wrap: wrap; font-size: var(--fs-sm); color: var(--mute); margin-top: var(--sp-1); }
+.tc-screen .legend i, .tc-screen .tl-legend i { display: inline-block; width: 10px; height: 3px; border-radius: 2px; margin-right: 5px; vertical-align: middle; background: var(--tone); }
+.tc-screen .tl-legend { margin-left: auto; display: flex; gap: var(--sp-4); font-size: var(--fs-sm); color: var(--mute); flex-wrap: wrap; }
+.tc-screen .tl-legend:empty { display: none; }
+.tc-screen .tl-legend i { width: 8px; height: 8px; }
+.tc-screen .mks { position: relative; height: 10px; margin: 0 7px; }
+.tc-screen .mks:empty { display: none; }
+.tc-screen .mk { position: absolute; top: 0; width: 4px; height: 10px; padding: 0; border: 0; border-radius: 2px; cursor: pointer; transform: translateX(-2px); background: var(--tone); }
+.tc-screen .mk:hover, .tc-screen .mk:focus-visible { width: 6px; transform: translateX(-3px); }
+
+/* Dice replay: the recorded decision and the model's probabilities */
+.tc-screen .bc-side .bc-mind .who { margin-bottom: 4px; }
+.tc-screen .bc-side .bc-mind .chosen { font-weight: 600; margin-bottom: 6px; }
+.tc-screen .bc-side .bc-mind .prob { display: grid; grid-template-columns: minmax(0, 1fr) 60px 36px; gap: 6px; align-items: center; font-size: var(--fs-sm, 12px); margin: 2px 0; }
+.tc-screen .bc-side .bc-mind .prob span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tc-screen .bc-side .bc-mind .prob i { display: block; height: 6px; border-radius: 3px; background: var(--mute, #888); }
+.tc-screen .bc-side .bc-mind .prob.on i { background: var(--gold, #c9a227); }
+.tc-screen .bc-side .bc-mind .prob.on span { font-weight: 600; }
+.tc-screen .bc-side .bc-mind .prob b { text-align: right; font-variant-numeric: tabular-nums; }
+.tc-screen .bc-side .bc-mind .expl { font-style: italic; }

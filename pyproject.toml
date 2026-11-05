@@ -1,0 +1,29 @@
+[build-system]
+requires = ["hatchling>=1.33,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "boardcraft"
+version = "0.1.0"
+description = "Board game engines and play resources."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["numpy>=2.2.6,<3"]
+
+[project.scripts]
+boardcraft = "boardcraft.cli:main"
+
+[project.optional-dependencies]
+serve = ["fastapi>=0.162,<1", "uvicorn>=0.54,<1", "mcp>=2.3,<3"]
+mcp = ["mcp>=2.3,<3"]
+test = ["pytest>=8.4.2,<9", "build>=1.6.1,<2"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/boardcraft"]
+
+[tool.hatch.build.targets.sdist]
+include = ["/src", "/web", "/tests", "/README.md", "/pyproject.toml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-p no:cacheprovider"

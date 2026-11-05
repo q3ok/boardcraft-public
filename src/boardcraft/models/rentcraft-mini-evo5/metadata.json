@@ -1,0 +1,29 @@
+{
+  "action_id": "rentcraft-standard-v2",
+  "action_layout_hash": "d697e0aaf41f63352d167c1502de87a42d228e20e3fb8af267693b5445d9f440",
+  "action_version": 2,
+  "architecture": {
+    "activation": "relu",
+    "family": "rentcraft-legacy-mlp-v1",
+    "hidden": [
+      32,
+      32
+    ],
+    "selection": "greedy"
+  },
+  "description": "Compact MLP network (32x32) from the earliest Rentcraft model line, trained with reinforcement learning. Uses the older block encoder with generated trade candidates. A light, fast opponent. Always chooses the best-scoring legal move (greedy).",
+  "display_name": "mini-evo5",
+  "encoder_id": "rentcraft-legacy-blocks-mini-evo5",
+  "encoder_layout_hash": "641c55280a22ce4c73f75d3c1212ef94a712a425dc7fc64b5ec8b48697a0bef9",
+  "encoder_version": 1,
+  "format": 1,
+  "game_id": "rentcraft",
+  "input_size": 1055,
+  "observation_version": "1",
+  "output_size": 221,
+  "rules_version": "1",
+  "value_head": {
+    "format": 1
+  },
+  "weights_sha256": "a9c7b80347eea6b5f78da643b07309d9fdce9e8b748f4141928db4de2e4e8cce"
+}

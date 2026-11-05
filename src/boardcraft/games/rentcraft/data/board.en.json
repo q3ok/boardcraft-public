@@ -1,0 +1,556 @@
+[
+  {
+    "index": 0,
+    "name": "Start",
+    "kind": "start",
+    "group": null,
+    "price": 0,
+    "rents": [],
+    "house_cost": 0,
+    "tax": 0
+  },
+  {
+    "index": 1,
+    "name": "Mill Street",
+    "kind": "property",
+    "group": "brown",
+    "price": 60,
+    "rents": [
+      2,
+      10,
+      30,
+      90,
+      160,
+      250
+    ],
+    "house_cost": 50,
+    "tax": 0
+  },
+  {
+    "index": 2,
+    "name": "Community Fund",
+    "kind": "community_fund",
+    "group": null,
+    "price": 0,
+    "rents": [],
+    "house_cost": 0,
+    "tax": 0
+  },
+  {
+    "index": 3,
+    "name": "Blacksmith Street",
+    "kind": "property",
+    "group": "brown",
+    "price": 60,
+    "rents": [
+      4,
+      20,
+      60,
+      180,
+      320,
+      450
+    ],
+    "house_cost": 50,
+    "tax": 0
+  },
+  {
+    "index": 4,
+    "name": "Income Tax",
+    "kind": "tax",
+    "group": null,
+    "price": 0,
+    "rents": [],
+    "house_cost": 0,
+    "tax": 200
+  },
+  {
+    "index": 5,
+    "name": "West Station",
+    "kind": "railroad",
+    "group": null,
+    "price": 200,
+    "rents": [],
+    "house_cost": 0,
+    "tax": 0
+  },
+  {
+    "index": 6,
+    "name": "Linden Street",
+    "kind": "property",
+    "group": "light_blue",
+    "price": 100,
+    "rents": [
+      6,
+      30,
+      90,
+      270,
+      400,
+      550
+    ],
+    "house_cost": 50,
+    "tax": 0
+  },
+  {
+    "index": 7,
+    "name": "Opportunity",
+    "kind": "opportunity",
+    "group": null,
+    "price": 0,
+    "rents": [],
+    "house_cost": 0,
+    "tax": 0
+  },
+  {
+    "index": 8,
+    "name": "Birch Street",
+    "kind": "property",
+    "group": "light_blue",
+    "price": 100,
+    "rents": [
+      6,
+      30,
+      90,
+      270,
+      400,
+      550
+    ],
+    "house_cost": 50,
+    "tax": 0
+  },
+  {
+    "index": 9,
+    "name": "Maple Street",
+    "kind": "property",
+    "group": "light_blue",
+    "price": 120,
+    "rents": [
+      8,
+      40,
+      100,
+      300,
+      450,
+      600
+    ],
+    "house_cost": 50,
+    "tax": 0
+  },
+  {
+    "index": 10,
+    "name": "Jail",
+    "kind": "jail",
+    "group": null,
+    "price": 0,
+    "rents": [],
+    "house_cost": 0,
+    "tax": 0
+  },
+  {
+    "index": 11,
+    "name": "Market Square",
+    "kind": "property",
+    "group": "pink",
+    "price": 140,
+    "rents": [
+      10,
+      50,
+      150,
+      450,
+      625,
+      750
+    ],
+    "house_cost": 100,
+    "tax": 0
+  },
+  {
+    "index": 12,
+    "name": "Power Station",
+    "kind": "utility",
+    "group": null,
+    "price": 150,
+    "rents": [],
+    "house_cost": 0,
+    "tax": 0
+  },
+  {
+    "index": 13,
+    "name": "Town Hall Street",
+    "kind": "property",
+    "group": "pink",
+    "price": 140,
+    "rents": [
+      10,
+      50,
+      150,
+      450,
+      625,
+      750
+    ],
+    "house_cost": 100,
+    "tax": 0
+  },
+  {
+    "index": 14,
+    "name": "Merchant Street",
+    "kind": "property",
+    "group": "pink",
+    "price": 160,
+    "rents": [
+      12,
+      60,
+      180,
+      500,
+      700,
+      900
+    ],
+    "house_cost": 100,
+    "tax": 0
+  },
+  {
+    "index": 15,
+    "name": "East Station",
+    "kind": "railroad",
+    "group": null,
+    "price": 200,
+    "rents": [],
+    "house_cost": 0,
+    "tax": 0
+  },
+  {
+    "index": 16,
+    "name": "Park Avenue",
+    "kind": "property",
+    "group": "orange",
+    "price": 180,
+    "rents": [
+      14,
+      70,
+      200,
+      550,
+      750,
+      950
+    ],
+    "house_cost": 100,
+    "tax": 0
+  },
+  {
+    "index": 17,
+    "name": "Community Fund",
+    "kind": "community_fund",
+    "group": null,
+    "price": 0,
+    "rents": [],
+    "house_cost": 0,
+    "tax": 0
+  },
+  {
+    "index": 18,
+    "name": "Garden Street",
+    "kind": "property",
+    "group": "orange",
+    "price": 180,
+    "rents": [
+      14,
+      70,
+      200,
+      550,
+      750,
+      950
+    ],
+    "house_cost": 100,
+    "tax": 0
+  },
+  {
+    "index": 19,
+    "name": "Rose Street",
+    "kind": "property",
+    "group": "orange",
+    "price": 200,
+    "rents": [
+      16,
+      80,
+      220,
+      600,
+      800,
+      1000
+    ],
+    "house_cost": 100,
+    "tax": 0
+  },
+  {
+    "index": 20,
+    "name": "Free Parking",
+    "kind": "free_parking",
+    "group": null,
+    "price": 0,
+    "rents": [],
+    "house_cost": 0,
+    "tax": 0
+  },
+  {
+    "index": 21,
+    "name": "Harbor Street",
+    "kind": "property",
+    "group": "red",
+    "price": 220,
+    "rents": [
+      18,
+      90,
+      250,
+      700,
+      875,
+      1050
+    ],
+    "house_cost": 150,
+    "tax": 0
+  },
+  {
+    "index": 22,
+    "name": "Opportunity",
+    "kind": "opportunity",
+    "group": null,
+    "price": 0,
+    "rents": [],
+    "house_cost": 0,
+    "tax": 0
+  },
+  {
+    "index": 23,
+    "name": "Sea Street",
+    "kind": "property",
+    "group": "red",
+    "price": 220,
+    "rents": [
+      18,
+      90,
+      250,
+      700,
+      875,
+      1050
+    ],
+    "house_cost": 150,
+    "tax": 0
+  },
+  {
+    "index": 24,
+    "name": "Fishermen's Boulevard",
+    "kind": "property",
+    "group": "red",
+    "price": 240,
+    "rents": [
+      20,
+      100,
+      300,
+      750,
+      925,
+      1100
+    ],
+    "house_cost": 150,
+    "tax": 0
+  },
+  {
+    "index": 25,
+    "name": "Central Station",
+    "kind": "railroad",
+    "group": null,
+    "price": 200,
+    "rents": [],
+    "house_cost": 0,
+    "tax": 0
+  },
+  {
+    "index": 26,
+    "name": "Sunny Street",
+    "kind": "property",
+    "group": "yellow",
+    "price": 260,
+    "rents": [
+      22,
+      110,
+      330,
+      800,
+      975,
+      1150
+    ],
+    "house_cost": 150,
+    "tax": 0
+  },
+  {
+    "index": 27,
+    "name": "Golden Street",
+    "kind": "property",
+    "group": "yellow",
+    "price": 260,
+    "rents": [
+      22,
+      110,
+      330,
+      800,
+      975,
+      1150
+    ],
+    "house_cost": 150,
+    "tax": 0
+  },
+  {
+    "index": 28,
+    "name": "Waterworks",
+    "kind": "utility",
+    "group": null,
+    "price": 150,
+    "rents": [],
+    "house_cost": 0,
+    "tax": 0
+  },
+  {
+    "index": 29,
+    "name": "Amber Avenue",
+    "kind": "property",
+    "group": "yellow",
+    "price": 280,
+    "rents": [
+      24,
+      120,
+      360,
+      850,
+      1025,
+      1200
+    ],
+    "house_cost": 150,
+    "tax": 0
+  },
+  {
+    "index": 30,
+    "name": "Go to Jail",
+    "kind": "go_to_jail",
+    "group": null,
+    "price": 0,
+    "rents": [],
+    "house_cost": 0,
+    "tax": 0
+  },
+  {
+    "index": 31,
+    "name": "Academy Street",
+    "kind": "property",
+    "group": "green",
+    "price": 300,
+    "rents": [
+      26,
+      130,
+      390,
+      900,
+      1100,
+      1275
+    ],
+    "house_cost": 200,
+    "tax": 0
+  },
+  {
+    "index": 32,
+    "name": "University Street",
+    "kind": "property",
+    "group": "green",
+    "price": 300,
+    "rents": [
+      26,
+      130,
+      390,
+      900,
+      1100,
+      1275
+    ],
+    "house_cost": 200,
+    "tax": 0
+  },
+  {
+    "index": 33,
+    "name": "Community Fund",
+    "kind": "community_fund",
+    "group": null,
+    "price": 0,
+    "rents": [],
+    "house_cost": 0,
+    "tax": 0
+  },
+  {
+    "index": 34,
+    "name": "Knowledge Square",
+    "kind": "property",
+    "group": "green",
+    "price": 320,
+    "rents": [
+      28,
+      150,
+      450,
+      1000,
+      1200,
+      1400
+    ],
+    "house_cost": 200,
+    "tax": 0
+  },
+  {
+    "index": 35,
+    "name": "North Station",
+    "kind": "railroad",
+    "group": null,
+    "price": 200,
+    "rents": [],
+    "house_cost": 0,
+    "tax": 0
+  },
+  {
+    "index": 36,
+    "name": "Opportunity",
+    "kind": "opportunity",
+    "group": null,
+    "price": 0,
+    "rents": [],
+    "house_cost": 0,
+    "tax": 0
+  },
+  {
+    "index": 37,
+    "name": "Royal Avenue",
+    "kind": "property",
+    "group": "dark_blue",
+    "price": 350,
+    "rents": [
+      35,
+      175,
+      500,
+      1100,
+      1300,
+      1500
+    ],
+    "house_cost": 200,
+    "tax": 0
+  },
+  {
+    "index": 38,
+    "name": "Luxury Tax",
+    "kind": "tax",
+    "group": null,
+    "price": 0,
+    "rents": [],
+    "house_cost": 0,
+    "tax": 100
+  },
+  {
+    "index": 39,
+    "name": "Castle Square",
+    "kind": "property",
+    "group": "dark_blue",
+    "price": 400,
+    "rents": [
+      50,
+      200,
+      600,
+      1400,
+      1700,
+      2000
+    ],
+    "house_cost": 200,
+    "tax": 0
+  }
+]

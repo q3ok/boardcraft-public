@@ -1,0 +1,31 @@
+{
+  "name": "@boardcraft/play",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/public.ts",
+    "./style.css": "./src/style.css",
+    "./ui/chart": "./src/ui/chart.ts",
+    "./ui/pager": "./src/ui/pager.ts",
+    "./ui/tokens.css": "./src/ui/tokens.css",
+    "./ui/nav": "./src/ui/nav.ts",
+    "./ui/shell.css": "./src/ui/shell.css",
+    "./ui/palette": "./src/ui/palette.ts",
+    "./ui/time": "./src/ui/time.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "build": "tsc --noEmit && vite build"
+  },
+  "dependencies": {
+    "three": "0.160.0"
+  },
+  "devDependencies": {
+    "@types/three": "0.160.0",
+    "typescript": "5.9.3",
+    "vite": "6.4.5",
+    "vitest": "3.2.7",
+    "jsdom": "25.0.1"
+  }
+}

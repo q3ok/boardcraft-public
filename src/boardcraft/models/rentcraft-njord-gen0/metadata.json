@@ -1,0 +1,29 @@
+{
+  "action_id": "rentcraft-standard-v2",
+  "action_layout_hash": "d697e0aaf41f63352d167c1502de87a42d228e20e3fb8af267693b5445d9f440",
+  "action_version": 2,
+  "architecture": {
+    "activation": "silu",
+    "dim": 128,
+    "family": "rentcraft-legacy-transformer-v1",
+    "ff": 512,
+    "heads": 4,
+    "layers": 6,
+    "selection": "greedy"
+  },
+  "description": "Transformer network (6 layers x 128). Learned the rules and imitated the rule bot \"Resistant Bonjour C + Windows\", then learned to propose and negotiate trades itself and was refined with PPO. The strongest Rentcraft model at the time of export. Always chooses the best-scoring legal move (greedy).",
+  "display_name": "njord-gen0",
+  "encoder_id": "rentcraft-visible-v7-offers8",
+  "encoder_layout_hash": "b08b3abb4fc35b369e8c2aafc93d36923daaa5d4c5b90c7f38aee865cf158135",
+  "encoder_version": 1,
+  "format": 1,
+  "game_id": "rentcraft",
+  "input_size": 3734,
+  "observation_version": "1",
+  "output_size": 221,
+  "rules_version": "1",
+  "value_head": {
+    "format": 1
+  },
+  "weights_sha256": "331e3eded2bd60d65b001d03c02b8d524e39f472c17e5ce65939ec87960c6ae9"
+}

@@ -1,0 +1,4 @@
+.cscroll { display:flex;align-items:stretch;width:100%;min-width:0;max-width:100%; }
+.cscroll-axis { flex:none; }
+.cscroll-plot { flex:1;min-width:0;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin; }
+.cscroll-plot svg { display:block;max-width:none; }
